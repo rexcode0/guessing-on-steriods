@@ -6,7 +6,11 @@ use std::{
     str::FromStr,
 };
 
-pub fn get_user_guess() -> Result<i32, ()> {
+pub enum UserErrors {
+    NoMoreAttempts,
+    WrongTypeOfInput,
+}
+pub fn get_user_guess() -> Result<i32, UserErrors> {
     for _ in 0..5 {
         let inpt: String = get_input(format!("{}", "enter you guess>".blue()).as_str());
         match inpt.trim().parse::<i32>() {
@@ -16,7 +20,7 @@ pub fn get_user_guess() -> Result<i32, ()> {
             }
         };
     }
-    panic!("player is not guessing teh number correctly, hence aborting");
+   Err(UserErrors::WrongTypeOfInput)
 }
 pub fn get_range() -> Range<i32> {
     loop {
@@ -31,21 +35,34 @@ pub fn get_range() -> Range<i32> {
     }
    
 }
-pub fn single_play(range: Range<i32>) -> i32 {
+pub fn single_play(range: Range<i32>) -> Result<i32,UserErrors> {
     let system_guess = fastrand::i32(range.clone());
     dbg!(system_guess);
-    for atempt in 1.. {
-        let user_guess: i32 = get_user_guess().unwrap();
+    for atempt in 1..3 {
+        let user_guess: i32 = match get_user_guess(){
+            Ok(num)=> num,
+            Err(_) => {
+                    return Err(UserErrors::WrongTypeOfInput);
+            }
+        };
         match user_guess.cmp(&system_guess) {
             Ordering::Less => println!("{}", "your entered guess is smaller".yellow()),
             Ordering::Equal => {
                 println!("{}", "congrats you won!");
-                return atempt;
+                return Ok(atempt);
             }
             Ordering::Greater => println!("{}", "your entered guess is bigger".cyan().italic()),
         }
     }
-    0
+    Err(UserErrors::NoMoreAttempts)
+}
+
+pub fn get_user_decision(prompt:&str) -> bool{
+     let decision:String= get_input(format!("{} [y/n]: ",prompt).as_str());
+     match decision.to_lowercase().as_str() {
+        "y" | "yes" => true,
+        _ => false
+     }
 }
 pub fn get_input<T>(prompt: &str) -> T
 where

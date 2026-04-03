@@ -113,7 +113,7 @@ pub fn write_to_file(leaderboard: String) {
         };
         match file.write(leaderboard.as_bytes()){
             Ok(file) => file,
-            Err(e) => {
+            Err(_) => {
                 eprint!("unable to write to file");
                 return;
             }

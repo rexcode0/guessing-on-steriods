@@ -1,14 +1,12 @@
-
 use colored::Colorize;
 use guessing_on_steriods::utils::{
     inputs::*,
-    player::{Player, print_table},
+    player::{Player, create_leaderboard},
 };
-
 fn main() {
+    dotenv::dotenv().ok();
     let mut player_list: Vec<Player> = Vec::new();
     println!("Wlecome to guess-on-steriods");
-
     let range = get_range();
 let mut index = 1;
     loop {
@@ -31,5 +29,6 @@ let mut index = 1;
         index+=1;
     }
     player_list.sort_by(|a, b| a.attempts.cmp(&b.attempts));
-    print_table(&player_list);
+    let leaderboard = create_leaderboard(&player_list);
+    write_to_file(leaderboard);
 }

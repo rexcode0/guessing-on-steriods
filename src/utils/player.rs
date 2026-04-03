@@ -20,8 +20,7 @@ impl Player {
     }
 }
 
-pub fn print_table(table :&Vec<Player>)
+pub fn create_leaderboard(table :&Vec<Player>)-> String
 {
-
-    print!("{}",Table::new(table).with(Style::re_structured_text()));
+    format!("{}",Table::new(table).with(Style::re_structured_text()))
 }

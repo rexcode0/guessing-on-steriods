@@ -19,8 +19,7 @@ impl Player {
         player
     }
 }
-
 pub fn create_leaderboard(table :&Vec<Player>)-> String
 {
-    format!("{}",Table::new(table).with(Style::re_structured_text()))
+    format!("{}",Table::new(table).with(Style::rounded()))
 }

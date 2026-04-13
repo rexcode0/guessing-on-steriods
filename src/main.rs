@@ -1,7 +1,6 @@
 use colored::Colorize;
 use guessing_on_steriods::utils::{
-    inputs::*,
-    player::{Player, create_leaderboard},
+    game_modes::{ single_play_hard}, inputs::*, structs::{Player, create_leaderboard}
 };
 fn main() {
     dotenv::dotenv().ok();
@@ -13,7 +12,7 @@ let mut index = 1;
         if !get_user_decision(format!("{}","want to continue".cyan()).as_str()) {
             break;
         }
-        let attempts = match single_play(range.clone()){
+        let attempts = match single_play_hard(range.clone()){
             Ok(attempts) => attempts,
             Err(UserErrors::NoMoreAttempts)=> {
                 println!("{}","i m surprised if someone can be be wrong this many times lets abort this session and start with a new one be a new player now".magenta());
@@ -30,5 +29,6 @@ let mut index = 1;
     }
     player_list.sort_by(|a, b| a.attempts.cmp(&b.attempts));
     let leaderboard = create_leaderboard(&player_list);
-    write_to_file(leaderboard);
+    write_to_file(&leaderboard);
+    println!("{}",leaderboard);
 }

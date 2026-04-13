@@ -1,3 +1,3 @@
 pub mod inputs;
-pub mod player;
-
+pub mod structs;
+pub mod game_modes;
